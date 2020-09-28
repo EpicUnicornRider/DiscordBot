@@ -1,0 +1,26 @@
+{
+  "name": "SebaTheBot",
+  "version": "1.0.0",
+  "description": "The Bot To Yeet Them All",
+  "main": "bot.js",
+  "author": "Kasper Grøn",
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "discord.js": "^11.5.1",
+    "discord.js-commando": "^0.10.0",
+    "ffmpeg": "0.0.4",
+    "ffmpeg-binaries": "^4.0.0",
+    "node-gyp": "^6.1.0",
+    "opusscript": "0.0.6",
+    "reddit-api-client": "^1.1.1",
+    "snekfetch": "^4.0.4",
+    "sqlite3": "^4.1.1",
+    "winston": "^3.2.1",
+    "ytdl-core": "latest"
+  },
+  "scripts": {
+    "start": "node ./bot"
+  },
+  "devDependencies": {},
+  "license": "ISC"
+}
