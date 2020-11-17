@@ -19,18 +19,44 @@ class QuotesCommand extends commando.Command {
       let count = 0;
 
       let res = args.split("'");
+      
+      let quoterN = res[0].toLowerCase();
+        
+      let all = res[2].toLowerCase();  
+    
+        
       if (!args[0]) {
           message.reply("Skriv hvem du vil se citater fra");
       }
-      else {
-        db.all("SELECT quote,quoter FROM quotes WHERE quoter = ?"
-        , [res[0]], (err, rows) => {
+      
+      if(all == "all") {
+        db.all("SELECT quoterName, quotesDesc FROM Quoter INNER JOIN Quotes ON Quotes.quoterID = Quoter.quoterID WHERE quoterName = ?"
+        , [quoterN], (err, rows) => {
           rows.forEach(function (row) {
             count++;
               message.channel.send({
                   embed: {
                       color: 1072150,
-                      description: `${row.quote} - ${row.quoter}`
+                      description: `${row.quotesDesc} - ${row.quoterName}`
+                  }
+              });
+          });
+
+          if(count == 0){
+            message.reply("Der er ingen med det navn der har citater");
+          }
+
+        });
+      }
+      else{
+          db.all("SELECT quoterName, quotesDesc FROM Quoter INNER JOIN Quotes ON Quotes.quoterID = Quoter.quoterID WHERE quoterName = ? ORDER BY RANDOM() LIMIT 1"
+        , [quoterN], (err, rows) => {
+          rows.forEach(function (row) {
+            count++;
+              message.channel.send({
+                  embed: {
+                      color: 1072150,
+                      description: `${row.quotesDesc} - ${row.quoterName}`
                   }
               });
           });

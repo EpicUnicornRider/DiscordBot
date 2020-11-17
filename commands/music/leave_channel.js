@@ -13,12 +13,7 @@ class LeaveChannelCommand extends commando.Command {
     
     async run(message, args) {
         
-        if(message.guild.voiceConnection){
-            message.guild.voiceConnection.disconnect();    
-        }
-        else {
-            message.reply('Jeg skal være i en voice channel kammerat');
-        }
+            message.member.voiceChannel.leave();
     }
 }
 

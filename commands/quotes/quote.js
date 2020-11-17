@@ -3,6 +3,9 @@ var sqlite3         =       require('sqlite3').verbose();
 var db              =       new sqlite3.Database('./database/discord.db');
 //const sql = new SQLite('./scores.sqlite');
 
+
+
+
 class QuoteCommand extends commando.Command {
 
     constructor(client){
@@ -13,7 +16,7 @@ class QuoteCommand extends commando.Command {
             description: 'Quotes a message'
         });
     }
-
+    
     async run(message, args) {
 
         let res = args.split("'");
@@ -22,12 +25,57 @@ class QuoteCommand extends commando.Command {
         }
 
         else {
-            //add_quote = "INSERT into Quotes(quote,quoter) VALUES (?, ?)", [res[0], res[2]], function(err,results) {}
-            db.run("INSERT into Quotes(quote,quoter) VALUES (?, ?)",
-            [res[0], res[2]],
-            function(err,results) {
-              message.reply("Citatet er sat ind min gut");
+            
+            let quoterN = res[2].toLowerCase();
+            
+            let qID = 0;
+            
+            let count = 0;
+            
+            
+            db.all("SELECT * FROM Quoter WHERE quoterName = (?)",
+            [quoterN]
+            , (err, rows) => {
+              rows.forEach(function (row) {
+                  count++;
+                  qID = row.quoterID;   
+                                    
+              });
+            
+                if(count == 0){
+
+                    db.run("INSERT into Quoter(quoterName) VALUES (?)",
+                    [quoterN]);
+
+                    db.all("SELECT quoterID FROM Quoter WHERE quoterName = (?)",
+                    [quoterN]
+                    , (err, rows) => {
+                      rows.forEach(function (row) {
+                          qID = row.quoterID;
+                      });
+
+                        db.run("INSERT into Quotes(quotesDesc, quoterID) VALUES (?, ?)",
+                        [res[0], qID],
+                        function(err,results) {
+                          message.reply("Citatet er sat ind min gut");
+                        });
+                    });
+
+                }
+                else{
+                    db.run("INSERT into Quotes(quotesDesc, quoterID) VALUES (?, ?)",
+                    [res[0], qID],
+                    function(err,results) {
+                      message.reply("Citatet er sat ind min gut");
+                    });
+                }
+                
+                
             });
+            
+            
+            
+            
         }
     }
 }
