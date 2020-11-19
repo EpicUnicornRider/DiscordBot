@@ -20,15 +20,16 @@ class QuotesCommand extends commando.Command {
 
       let res = args.split("'");
       
-      let quoterN = res[0].toLowerCase();
+      let quoterN = res[0] != null ? res[0].toLowerCase() : "";
         
-      let all = res[2].toLowerCase();  
+      let all = res[2] != null ? res[2].toLowerCase() : "";  
     
         
       if (!args[0]) {
           message.reply("Skriv hvem du vil se citater fra");
       }
-      
+          
+        
       if(all == "all") {
         db.all("SELECT quoterName, quotesDesc FROM Quoter INNER JOIN Quotes ON Quotes.quoterID = Quoter.quoterID WHERE quoterName = ?"
         , [quoterN], (err, rows) => {
